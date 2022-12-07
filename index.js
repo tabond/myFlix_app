@@ -15,9 +15,74 @@
 
 // Submit a link to your GitHub repo showing your modified “index.js” file with all of the above steps implemented.
 
-const http = require("http"),
-  fs = require("fs"),
-  url = require("url");
+// const http = require("http"),
+//   fs = require("fs"),
+//   url = require("url"),
+  const express = require('express'),
+  morgan = require ('morgan');
+  const app = express();
+
+  let topTenMovies = [
+    {
+        title: 'Pulp Fiction',
+        Year: '1994',
+        rating: '1'
+    },
+    {
+        title: 'The Lord of the Rings: The Fellowship of the Ring',
+        Year: '2001',
+        rating: '2'
+    },
+    {
+        title: 'The Lord of the Rings: The Return of the King',
+        Year: '2003',
+        rating: '3'
+    },
+    {
+        title: 'Forrest Gump',
+        Year: '1994',
+        rating: '4'
+    },
+    {
+        title: 'Fight Club',
+        Year: '1999',
+        rating: '5'
+    },
+    {
+        title: 'Inception',
+        Year: '2010',
+        rating: '6'
+    },
+    {
+        title: 'Star Wars: Episode V - The Empire Strikes Back',
+        Year: '1980',
+        rating: '7'
+    },
+    {
+        title: 'The Matrix',
+        Year: '1999',
+        rating: '8'
+    },{
+        title: 'Goodfellas',
+        Year: '1990',
+        rating: '9'
+    },{
+        title: 'The lion King',
+        Year: '1994',
+        rating: '10'
+    }
+  ];
+app.use(morgan('common'));
+
+app.get('/',(req, res)=> {
+    res.send('welcome to myFlix');
+});
+
+app.get('/movies',(req, res) => {
+res.json();
+})
+
+
 http
   .createServer((request, response) => {
     let addr = request.url,
@@ -48,10 +113,9 @@ http
         throw err;
       }
 
-      response.writeHead(200, { "content-type": "text/plain" });
-      response, write(data);
-      response.end("Hello Node!\n");
-    });
+      app.get('/', (req, res) => {
+  res.send('Welcome to my book club!');
+});
   })
   .listen(8080);
 console.log("My first Node test server is running on port 8080.");

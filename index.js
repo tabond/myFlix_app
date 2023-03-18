@@ -1,6 +1,8 @@
 const express = require("express"),
   bodyParser = require("body-parser"),
   uuid = require("uuid");
+const passport = require("passport");
+require("./passport");
 
 //require mongoose and models.js
 const morgan = require("morgan");
@@ -11,8 +13,8 @@ const Models = require("./models.js");
 //model names for inport
 const Movies = Models.Movie;
 const Users = Models.User;
-const Genres = Models.Genre;
-const Directors = Models.Director;
+//const Genres = Models.Genre;
+//const Directors = Models.Director;
 
 //db name is test - allowinf mongoose to performe crud on database
 mongoose.connect("mongodb://localhost:27017/test", {
@@ -25,6 +27,12 @@ app.use(morgan("common"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// require passport
+let auth = require("./auth")(app);
+const passport = require("passport");
+require("./passport");
+
+// intial text
 app.get("/", (req, res) => {
   res.send("welcome to myFlix!!");
 });
@@ -54,9 +62,9 @@ app.get("/movies/:Title", (req, res) => {
 });
 //Return data about a genre (description) by name/title (e.g., “Thriller”);
 app.get("/genre/:Name", (req, res) => {
-  Genres.findOne({ Name: req.params.Name })
-    .then((genre) => {
-      res.status(201).json(genre.Description);
+  Movies.findOne({ "Genre.Name": req.params.Name })
+    .then((movie) => {
+      res.status(201).json(movie.Genre);
     })
     .catch((error) => {
       console.error(error);
@@ -66,9 +74,9 @@ app.get("/genre/:Name", (req, res) => {
 
 //get info on director when looking up director
 app.get("/director/:Name", (req, res) => {
-  Directors.findOne({ Name: req.params.Name })
-    .then((director) => {
-      res.json(director);
+  Movies.findOne({ "Director.Name": req.params.Name })
+    .then((movie) => {
+      res.status(201).json(movie.Director);
     })
     .catch((error) => {
       console.error(error);

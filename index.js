@@ -1,8 +1,6 @@
 const express = require("express"),
   bodyParser = require("body-parser"),
   uuid = require("uuid");
-const passport = require("passport");
-require("./passport");
 
 //require mongoose and models.js
 const morgan = require("morgan");

@@ -1,10 +1,10 @@
 const passport = require("passport"),
-  LocalStratergy = require("passport-local").Strategy,
-  Models = requie("./models.js"),
+  LocalStrategy = require("passport-local").Strategy,
+  Models = require("./models.js"),
   passportJWT = require("passport-jwt");
 
 let Users = Models.User,
-  JWTStratergy = passportJWT.Strategy,
+  JWTStrategy = passportJWT.Strategy,
   ExtractJWT = passportJWT.ExtractJwt;
 
 passport.use(
@@ -34,10 +34,10 @@ passport.use(
 );
 
 passport.use(
-  new JWTStratergy(
+  new JWTStrategy(
     {
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-      secretOrkey: "your_jwt_secret",
+      secretOrKey: "your_jwt_secret",
     },
     (jwtPayload, callback) => {
       return Users.findById(jwtPayload._id)
@@ -55,14 +55,14 @@ passport.use(
 
 const JWTSecret = "your_jwt_secret";
 
-const jwt = require("jsonwebtoken"),
-  passport = require("passport");
+const jwt = require("jsonwebtoken");
+//passport = require("passport");
 
 // local passport file
-require("./passport");
+//require("./passport");
 
 let generateJWTToken = (user) => {
-  return jwt.sign(user, jwtSecret, {
+  return jwt.sign(user, JWTSecret, {
     subject: user.Username, //this is the user name you're encoding in the JWT
     expiresIn: "7d", // this specifies that the token will expire in 7 days
     alorithm: "HS256", // This is the algorithm used to "sign" or encode the values of the JWT

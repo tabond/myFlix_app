@@ -11,6 +11,8 @@ const Models = require("./models.js");
 //model names for inport
 const Movies = Models.Movie;
 const Users = Models.User;
+const { check, validationResult} =require('express-validator');
+
 //const Genres = Models.Genre;
 //const Directors = Models.Director;
 
@@ -24,6 +26,20 @@ mongoose.connect("mongodb://localhost:27017/test", {
 app.use(morgan("common"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const cors = require('cors');
+let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){ // If a specific origin isn’t found on the list of allowed origins
+      let message = 'The CORS policy for this application doesnt allow access from origin ' + origin;
+      return callback(new Error(message ), false);
+    }
+    return callback(null, true);
+  }
+}));
 
 // require passport
 let auth = require("./auth")(app);
@@ -99,15 +115,36 @@ app.get(
 );
 
 //mongoose style
-app.post("/users", (req, res) => {
+app.post("/users",  // Validation logic here for request
+//you can either use a chain of methods like .not().isEmpty()
+//which means "opposite of isEmpty" in plain english "is not empty"
+//or use .isLength({min: 5}) which means
+//minimum value of 5 characters are only allowed
+[
+  check('Username', 'Username is required').isLength({min: 5}),
+  check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+  check('Password', 'Password is required').not().isEmpty(),
+  check('Email', 'Email does not appear to be valid').isEmail()
+], (req, res) => {
+// check the validation object for errors
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  let hashedPassword = Users.hashedPassword(req.body.Password);
   Users.findOne({ Username: req.body.Username })
+  
+  //Search to see if user with the requested username exists
     .then((user) => {
       if (user) {
+        //If the user is found, send a response that it already exists
         return res.status(400).send(req.body.Username + " already exists");
       } else {
         Users.create({
           Username: req.body.Username,
-          Password: req.body.Password,
+          Password: hashedPassword,
           Email: req.body.Email,
           Birthday: req.body.Birthday,
         })

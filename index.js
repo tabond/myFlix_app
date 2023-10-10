@@ -25,6 +25,27 @@ app.use(morgan("common"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//cors
+const cors = require("cors");
+//constrict acceptance to certain origins
+let allowedOrigins = ["http://localhost:8080", "http://testsite.com"];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        // If a specific origin isn’t found on the list of allowed origins
+        let message =
+          "The CORS policy for this application doesn’t allow access from origin" +
+          origin;
+        return callback(new Error(message), false);
+      }
+      return callback(null, true);
+    },
+  })
+);
+
 // require passport
 let auth = require("./auth")(app);
 const passport = require("passport");
@@ -276,9 +297,9 @@ app.delete(
 );
 
 //access doc using express static
-app.use("/documentation", express.static("public"));
+app.use(express.static("public"));
 
-//error handling
+//error handlin
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Eeeer fix it!!");

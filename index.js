@@ -21,11 +21,12 @@ const Users = Models.User;
 });
 */
 
-//for online db  - allowinf mongoose to performe crud on database
-mongoose.connect(
-  "mongodb+srv://tabond23:WihJHnU2iOqE4BNo@cluster0.n0ssayf.mongodb.net/myFlixDB?retryWrites=true&w=majority",
-  { useNewUrlParser: true, useUnifiedTopology: true }
-);
+//With concealed URI
+mongoose.connect(process.env.CONNECTION_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+process.env.CONNECTION_URI;
 
 //log req to server
 app.use(morgan("common"));

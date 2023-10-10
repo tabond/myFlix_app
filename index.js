@@ -15,10 +15,17 @@ const Users = Models.User;
 //const Directors = Models.Director;
 
 //db name is test - allowinf mongoose to performe crud on database
-mongoose.connect("mongodb://localhost:27017/test", {
+/*mongoose.connect("mongodb://localhost:27017/test", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+*/
+
+//for online db  - allowinf mongoose to performe crud on database
+mongoose.connect(
+  "mongodb+srv://tabond23:WihJHnU2iOqE4BNo@cluster0.n0ssayf.mongodb.net/myFlixDB?retryWrites=true&w=majority",
+  { useNewUrlParser: true, useUnifiedTopology: true }
+);
 
 //log req to server
 app.use(morgan("common"));

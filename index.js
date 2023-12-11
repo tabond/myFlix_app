@@ -17,10 +17,18 @@ const { check, validationResult } = require("express-validator");
 //const Directors = Models.Director;
 
 //db name is test - allowinf mongoose to performe crud on database
-mongoose.connect("mongodb://localhost:27017/test", {
+/*mongoose.connect("mongodb://localhost:27017/test", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+*/
+
+//With concealed URI
+mongoose.connect(process.env.CONNECTION_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+process.env.CONNECTION_URI;
 
 //log req to server
 app.use(morgan("common"));
@@ -28,6 +36,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const cors = require("cors");
+//constrict acceptance to certain origins
+
 let allowedOrigins = ["http://localhost:8080", "http://testsite.com"];
 
 app.use(
@@ -324,9 +334,9 @@ app.delete(
 );
 
 //access doc using express static
-app.use("/documentation", express.static("public"));
+app.use(express.static("public"));
 
-//error handling
+//error handlin
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Eeeer fix it!!");

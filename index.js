@@ -119,7 +119,20 @@ app.get(
   (req, res) => {
     Movies.findOne({ "Director.Name": req.params.Name })
       .then((movie) => {
-        res.status(201).json(movie.Director);
+        // Check if movie is null
+        if (!movie) {
+          return res.status(404).json({ error: "Movie not found" });
+        }
+
+        // Check if Director property is present
+        if (!movie.Director) {
+          return res
+            .status(404)
+            .json({ error: "Director not found for the movie" });
+        }
+
+        // If everything is fine, send the Director information
+        res.status(200).json(movie.Director);
       })
       .catch((error) => {
         console.error(error);

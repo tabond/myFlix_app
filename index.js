@@ -37,7 +37,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //cors
 const cors = require("cors");
 //constrict acceptance to certain origins
-let allowedOrigins = ["http://localhost:8080", "http://testsite.com"];
+let allowedOrigins = [
+  "http://localhost:8080",
+  "http://testsite.com",
+  "http://localhost:1234",
+];
 
 app.use(
   cors({

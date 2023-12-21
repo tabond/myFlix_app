@@ -121,7 +121,7 @@ app.get(
   "/directors/:Name",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Movies.findOne({ Name: req.params.Name })
+    Movies.findOne({ "Director.Name": req.params.Name })
       .then((movie) => {
         // Check if movie is null
         if (!movie) {

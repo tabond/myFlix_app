@@ -70,7 +70,7 @@ app.get("/", (req, res) => {
 });
 
 //Get Documentationhtml
-app.get('/myFlix_app/documentation', cors(), passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/documentation', cors(), passport.authenticate('jwt', { session: false }), (req, res) => {
     res.sendFile('public/documentation.html', { root: __dirname });
 
 //Returns all movies to user

@@ -69,6 +69,10 @@ app.get("/", (req, res) => {
   res.send("welcome to myFlix!!");
 });
 
+//Get Documentationhtml
+app.get('/myFlix_app/documentation', cors(), passport.authenticate('jwt', { session: false }), (req, res) => {
+    res.sendFile('public/documentation.html', { root: __dirname });
+
 //Returns all movies to user
 app.get(
   "/movies",
@@ -118,10 +122,10 @@ app.get(
 
 //get info on director when looking up director
 app.get(
-  "/director/:Name",
+  "/directors/:Name",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Movies.findOne({ "Director.Name": req.params.Name })
+    Movies.findOne({ Name: req.params.Name })
       .then((movie) => {
         // Check if movie is null
         if (!movie) {

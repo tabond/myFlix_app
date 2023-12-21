@@ -69,10 +69,6 @@ app.get("/", (req, res) => {
   res.send("welcome to myFlix!!");
 });
 
-//Get Documentationhtml
-app.get('/documentation', cors(), passport.authenticate('jwt', { session: false }), (req, res) => {
-    res.sendFile('public/documentation.html', { root: __dirname });
-
 //Returns all movies to user
 app.get(
   "/movies",
